@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Scatter Plot Dashboard with D3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        label[for="pitcher-dropdown"],
+        label[for="batter-dropdown"],
+        label[for="date-dropdown"],
+        label[for="type-dropdown"],
+        label[for="event-dropdown"],
+        label[for="hittype-dropdown"] {
+        color: white;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100%;
+            background-color: #182031;
+        }
+
+        .selectors-container {
+            background-color: #182031;
+            padding: 10px;
+        }
+
+        text {
+            font-family: "Overpass", sans-serif;
+        }
+
+        select {
+            font-size: 18px;
+            padding: 10px;
+            height: 40px;
+        }
+
+        .axis path,
+        .axis line {
+            stroke: white;
+        }
+
+        .axis text {
+            fill: white;
+        }
+
+        .svg-background { 
+            position: fixed;
+            top: -8%;
+            left: 40%;
+            width: 95vw;
+            height: auto;
+            z-index: -1;
+        }
+        /* svg background vs external svg */
+
+        div {
+            display: inline-block;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Unified dropdown menu for both scatter plots -->
+
+    <!-- Dropdown for pitchers -->
+<div>
+    <label for="pitcher-dropdown">Select Pitcher:</label>
+    <select id="pitcher-dropdown"></select>
+</div>
+
+<!-- Dropdown for batters -->
+<div>
+    <label for="batter-dropdown">Select Batter:</label>
+    <select id="batter-dropdown"></select>
+</div>
+
+<div>
+    <label for="date-dropdown">Select Date:</label>
+    <select id="date-dropdown"></select>
+</div>
+
+<div>
+    <label for="type-dropdown">Select Pitch Type:</label>
+    <select id="type-dropdown"></select>
+</div>
+
+<div>
+    <label for="event-dropdown">Select Event:</label>
+    <select id="event-dropdown"></select>
+</div>
+
+<div>
+    <label for="hittype-dropdown">Select Hit Type:</label>
+    <select id="hittype-dropdown"></select>
+</div>
+
+<!-- Legend for scatter plots -->
+<div id="legend" class="legend"></div>
+
+<!-- First scatter plot -->
+<div id="scatterplot1" class="scatterplot"></div>
+
+    <script>
+  // Load the CSV file
+
+d3.csv("DBB_data3.csv").then(data => {
+    // Convert numeric values from strings to numbers
+    data.forEach(d => {
+        d.pitch_location_side_ft = +d.pitch_location_side_ft;
+        d.pitch_location_height_ft = +d.pitch_location_height_ft;
+        d.Pitcher = d.Pitcher;
+        d.Batter = d.Batter;
+        d.PitchType = d.PitchType;
+        d.hit = +d.hit;
+        d.Speed = +d.Speed;
+        d.SpinRate = +d.SpinRate;
+        d.abv_vert_break = +d.abv_vert_break;
+        d.abv_hori_break = +d.abv_hori_break;
+        d.PitchDate = d.PitchDate;
+        d.event = d.event;
+        d.hit_type = d.hit_type;
+    });
+
+    // Get unique values to populate dropdowns
+    const uniquePitchers = [...new Set(data.map(d => d.Pitcher))];
+    const uniqueBatters = [...new Set(data.map(d => d.Batter))];
+    const uniqueDates = [...new Set(data.map(d => d.PitchDate))];
+    const uniqueTypes = [...new Set(data.map(d => d.PitchType))];
+    const uniqueEvents = [...new Set(data.map(d => d.event))];
+    const uniqueHitTypes = [...new Set(data.map(d => d.hit_type))];
+
+    // Populate the pitcher dropdown
+    d3.select("#pitcher-dropdown")
+        .append("option")
+        .attr("value", "all")
+        .text("All Pitchers");
+
+    uniquePitchers.forEach(id => {
+        d3.select("#pitcher-dropdown")
+            .append("option")
+            .attr("value", id)
+            .text(id);
+    });
+
+    // Populate the batter dropdown
+    d3.select("#batter-dropdown")
+        .append("option")
+        .attr("value", "all")
+        .text("All Batters");
+
+    uniqueBatters.forEach(id => {
+        d3.select("#batter-dropdown")
+            .append("option")
+            .attr("value", id)
+            .text(id);
+    });
+
+    // Populate the date dropdown
+    d3.select("#date-dropdown")
+        .append("option")
+        .attr("value", "all")
+        .text("All Dates (d/m/y)");
+
+    uniqueDates.forEach(id => {
+        d3.select("#date-dropdown")
+            .append("option")
+            .attr("value", id)
+            .text(id);
+    });
+
+    // Populate the type dropdown
+    d3.select("#type-dropdown")
+        .append("option")
+        .attr("value", "all")
+        .text("All Pitch Types");
+
+    uniqueTypes.forEach(id => {
+        d3.select("#type-dropdown")
+            .append("option")
+            .attr("value", id)
+            .text(id);
+    });
+
+    // Populate the event dropdown
+    d3.select("#event-dropdown")
+        .append("option")
+        .attr("value", "all")
+        .text("All Events");
+
+    uniqueEvents.forEach(id => {
+        d3.select("#event-dropdown")
+            .append("option")
+            .attr("value", id)
+            .text(id);
+    });
+
+    // Populate the Hit Type dropdown
+    d3.select("#hittype-dropdown")
+        .append("option")
+        .attr("value", "all")
+        .text("All Hit Types");
+
+    uniqueHitTypes.forEach(id => {
+        d3.select("#hittype-dropdown")
+            .append("option")
+            .attr("value", id)
+            .text(id);
+    });
+
+    const margin = {top: 70, right: 70, bottom: 70, left: 70},
+            width = window.innerWidth,
+            height = window.innerHeight;
+
+    // Function to create a scatter plot
+    function createScatterPlot(container, xVar, yVar, filterPitcher, filterBatter, filterDate, filterType, filterEvent, filterHitType) {
+
+        // Filter data based on the selected values
+        let filteredData = data;
+        if (filterPitcher !== "all") {
+            filteredData = filteredData.filter(d => d.Pitcher == filterPitcher);
+        }
+        if (filterBatter !== "all") {
+            filteredData = filteredData.filter(d => d.Batter == filterBatter);
+        }
+        if (filterDate !== "all") {
+            filteredData = filteredData.filter(d => d.PitchDate == filterDate);
+        }
+        if (filterType !== "all") {
+            filteredData = filteredData.filter(d => d.PitchType == filterType);
+        }
+        if (filterEvent !== "all") {
+            filteredData = filteredData.filter(d => d.event == filterEvent);
+        }
+        if (filterHitType !== "all") {
+            filteredData = filteredData.filter(d => d.hit_type == filterHitType);
+        }
+
+        console.log(filteredData)
+
+        const svg = d3.select(container)
+            .html("") // Clear previous SVG content
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g");
+
+        svg.select("body") //zone viz or body? is this initializing whole svg?
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .append("g");
+
+        d3.xml("./baseball_player2.svg").then(function(xml) {
+            const importedNode = document.importNode(xml.documentElement, true)
+            d3.select(container)
+                .insert(() => importedNode, ":first-child")
+                .classed("svg-background", true)
+                .attr("width", width + margin.right + margin.left)
+                .attr("height", height + margin.top + margin.bottom)
+
+        });
+
+        const xScale = d3.scaleLinear()
+            .domain([-2.75, 2.75])
+            .range([700 - margin.right, width - margin.right]);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, 5])
+            .range([height - margin.top, margin.top]);
+
+            const yTikMarks = [];
+            
+        let feet = 1.5;
+        while (feet <= 4) {
+        yTikMarks.push(feet);
+        feet += +(2 / 3).toFixed(2);
+        }
+
+        console.log(yTikMarks)
+
+        const xTikMarks = [];
+        feet = -0.75;
+        while (feet <= -0.75 + 1.5) {
+        xTikMarks.push(feet);
+        feet += +(1.5 / 3).toFixed(2);
+        }
+
+        console.log(xTikMarks)
+
+        svg.selectAll(".x-lines")
+        .data(xTikMarks)
+        .enter()
+        .append("line")
+        .attr("class", "x-lines")
+        .attr("x1", d => xScale(d))
+        .attr("y1", yScale(yTikMarks[0]))
+        .attr("x2", d => xScale(d))
+        .attr("y2", yScale(yTikMarks[yTikMarks.length - 1]))
+        .attr("stroke", "white")
+        .attr("stroke-width", (d, i) => (i === 0 || i === xTikMarks.length - 1) ? 2 : 2);
+
+        svg.selectAll(".y-lines")
+        .data(yTikMarks)
+        .enter()
+        .append("line")
+        .attr("class", "y-lines")
+        .attr("x1", xScale(xTikMarks[0]))
+        .attr("y1", d => yScale(d))
+        .attr("x2", xScale(xTikMarks[xTikMarks.length - 1]))
+        .attr("y2", d => yScale(d))
+        .attr("stroke", "white")
+        .attr("stroke-width", (d, i) => (i === 0 || i === yTikMarks.length - 1) ? 2 : 2);
+
+        const color = d3.scaleOrdinal()
+            .domain(['Fastball', 'Curveball', 'Slider', 'ChangeUp', 'Cutter', 'Undefined'])
+            .range(["red", "blue", "yellow", "green", "orange", "gray"]);
+        
+        svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(${0},${height - margin.bottom})`)
+        .call(d3.axisBottom(xScale));
+
+        svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(${700 - margin.right},${0})`)
+        .call(d3.axisLeft(yScale));
+
+        // Append different shapes based on 'hit' value
+        filteredData.forEach(d => {
+            if (d.hit === 0) {
+                svg.append("circle")
+                    .attr("cx", xScale(d[xVar]))
+                    .attr("cy", yScale(d[yVar]))
+                    .attr("r", 5)
+                    .style("fill", color(d.PitchType))
+                    .style("stroke", "black")
+                    .style("stroke-width", 1.5);
+            } else {
+                svg.append("rect")
+                    .attr("x", xScale(d[xVar]) - 3)
+                    .attr("y", yScale(d[yVar]) - 3)
+                    .attr("width", 9)
+                    .attr("height", 9)
+                    .style("fill", color(d.PitchType))
+                    .style("stroke", "black")
+                    .style("stroke-width", 1.5);
+            }
+        });
+
+        console.log(data)
+
+        const averageSpeed = d3.mean(filteredData, d => d.Speed).toFixed(1);
+        const averageSpinRate = d3.mean(filteredData, d => d.SpinRate).toFixed(0);
+        const averageAbvVertBreak = d3.mean(filteredData, d => d.abv_vert_break).toFixed(2);
+        const averageAbvHoriBreak = d3.mean(filteredData, d => d.abv_hori_break).toFixed(2);
+
+        console.log(averageSpeed)
+        console.log(averageSpinRate)
+        console.log(averageAbvVertBreak) 
+        console.log(averageAbvHoriBreak)
+
+        const speedExtent = d3.extent(data, d => d.Speed);
+        const spinRateExtent = d3.extent(data, d => d.SpinRate);
+        const vertBreakExtent = d3.extent(data, d => d.abv_vert_break);
+        const horiBreakExtent = d3.extent(data, d => d.abv_hori_break);
+
+        console.log(speedExtent)
+        console.log(spinRateExtent)
+        console.log(vertBreakExtent)
+        console.log(horiBreakExtent)
+
+        const speedColorScale = d3.scaleSequential(d3.interpolateBuGn)
+        .domain(speedExtent);
+
+        const spinRateColorScale = d3.scaleSequential(d3.interpolateBuGn)
+        .domain(spinRateExtent);
+
+        const vertBreakColorScale = d3.scaleSequential(d3.interpolateBuGn)
+        .domain(vertBreakExtent);
+
+        const horiBreakColorScale = d3.scaleSequential(d3.interpolateBuGn)
+        .domain(horiBreakExtent);
+
+        const tileWidth = 100;
+        const tileHeight = 100;
+        const tileMargin = 20;
+
+        const centerX = 225 - margin.right / 2;
+        const centerY = height / 2;
+
+        const averages = [
+            { metric: 'Speed\n ', value: averageSpeed, unit: 'MPH', colorfcn: speedColorScale, tx: centerX, ty: centerY - tileHeight - tileMargin},
+            { metric: 'Spin\nRate', value: averageSpinRate, unit: 'RPM', colorfcn: spinRateColorScale, tx: centerX + tileWidth + tileMargin, ty: centerY - tileHeight - tileMargin},
+            { metric: 'Vertical\nBreak', value: averageAbvVertBreak, unit: 'FT', colorfcn: vertBreakColorScale, tx: centerX, ty: centerY},
+            { metric: 'Horizontal\nBreak', value: averageAbvHoriBreak, unit: 'FT', colorfcn: horiBreakColorScale, tx: centerX + tileWidth + tileMargin, ty: centerY},
+        ];
+
+        console.log('Averages:', averages);
+
+        svg.selectAll("tiles")
+        .data(averages)
+        .enter()
+        .append("rect")
+        .attr("x", d => d.tx)
+        .attr("y", d => d.ty)
+        .attr("width", tileWidth)
+        .attr("height", tileHeight)
+        .attr("rx", 15)
+        .attr("ry", 15)
+        .attr("fill", d => d.colorfcn(d.value));
+
+        svg.selectAll("averages_text")
+        .data(averages)
+        .enter()
+        .append("text")
+        .attr("x", d => d.tx + 50)
+        .attr("y", d => d.ty + 20)  // Initial y position
+        .attr("text-anchor", "middle")
+        .attr("font-size", "16px")
+        .attr("font-family", "Overpass")
+        .attr("fill", "#182031")
+        .each(function(d) {
+            const parts = `${d.metric}\n${d.value}\n${d.unit}`.split('\n');
+            d3.select(this).selectAll("tspan")
+                .data(parts)
+                .join("tspan")
+                .attr("x", d.tx + 50)
+                .attr("dy", (d, i) => {
+                    if (i === 0) return 0;  // no offset for the first line
+                    if (i === 1) return 15;
+                    if(i === 2) return 30; // larger offset between metric and value
+                    return 15;  // regular offset between value and unit
+                })
+                .text(d => d)
+                .style("font-weight", (d, i) => i === 2 ? "bold" : "normal")
+                .style("font-size", (d, i) => i === 2 ? "20px" : "16px");
+        });
+        
+        svg.append("text")
+        .attr("x", centerX + tileWidth - (2.65 * tileMargin))
+        .attr("y", centerY - (2*tileMargin) - tileHeight)
+        .attr("fill", "white")
+        .attr("font-size", "24px")
+        .attr("font-family", "Overpass")
+        .text("AVERAGES")
+
+        const legendLabels = [
+        { label: "FB", color: color("Fastball") },
+        { label: "CB", color: color("Curveball") },
+        { label: "SL", color: color("Slider") },
+        { label: "CH", color: color("ChangeUp") },
+        { label: "CT", color: color("Cutter") },
+        { label: "Undef.", color: color("Undefined") }];
+
+        const legend = svg.append("g")
+        .attr("transform", `translate(${700 - margin.right + 20}, ${margin.top})`);
+
+        legend.selectAll("legend_circles")
+        .data(legendLabels)
+        .enter()
+        .append("circle")
+        .attr("cx", -margin.right - 50)
+        .attr("cy", (d, i) => i * 25)
+        .attr("r", 7)
+        .attr("stroke", "black")
+        .attr("fill", d => d.color)
+        .attr("opacity", 1);
+
+        legend.selectAll("pitch_type_legend")
+        .data(legendLabels)
+        .enter()
+        .append("text")
+        .attr("x", -margin.right - 35)
+        .attr("y", (d, i) => i * 25)
+        .attr("dy", ".35em")
+        .attr("fill", "white")
+        .text(d => d.label);
+
+        const legendWidth = 0.5 * tileWidth;
+        const legendHeight = (2 * tileHeight) + tileMargin;
+
+        const gradientColorScale = d3.scaleSequential(d3.interpolateBuGn)
+            .domain([1, 0]);
+
+        const defs = svg.append("defs");
+
+        const gradient = defs.append("linearGradient")
+        .attr("id", "gradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "0%")
+        .attr("y2", "100%");
+
+        gradient.selectAll("stop")
+            .data(d3.range(0, 1.1, 0.1))
+            .enter().append("stop")
+            .attr("offset", d => `${d * 100}%`)
+            .attr("stop-color", d => gradientColorScale(d));
+
+        const tile_legend = svg.append("g")
+            .attr("transform", `translate(${margin.left}, ${centerY - tileHeight - tileMargin})`);
+
+        tile_legend.append("rect")
+            .attr("width", legendWidth)
+            .attr("height", legendHeight)
+            .style("fill", "url(#gradient)");
+
+        tile_legend.append("text")
+            .attr("x", margin.left - 120)
+            .attr("y", margin.top - 55)
+            .attr("fill", "white")
+            .text("High");
+
+        tile_legend.append("text")
+            .attr("x", margin.left - 120)
+            .attr("y", margin.top - 70 + legendHeight)
+            .attr("fill", "white")
+            .text("Low");
+    }
+
+    // Initial render with "All Data" selected
+    createScatterPlot("#scatterplot1", "pitch_location_side_ft", "pitch_location_height_ft", "all", "all", "all", "all", "all", "all");
+
+    // Update scatter plot when either dropdown value changes
+    function updatePlot() {
+        const selectedPitcher = d3.select("#pitcher-dropdown").property("value");
+        const selectedBatter = d3.select("#batter-dropdown").property("value");
+        const selectedDate = d3.select("#date-dropdown").property("value");
+        const selectedType = d3.select("#type-dropdown").property("value");
+        const selectedEvent = d3.select("#event-dropdown").property("value");
+        const selectedHitType = d3.select("#hittype-dropdown").property("value");
+        createScatterPlot("#scatterplot1", "pitch_location_side_ft", "pitch_location_height_ft", selectedPitcher, selectedBatter, selectedDate, selectedType, selectedEvent, selectedHitType);
+    }
+
+    d3.select("#pitcher-dropdown").on("change", updatePlot);
+    d3.select("#batter-dropdown").on("change", updatePlot);
+    d3.select("#date-dropdown").on("change", updatePlot);
+    d3.select("#type-dropdown").on("change", updatePlot);
+    d3.select("#event-dropdown").on("change", updatePlot);
+    d3.select("#hittype-dropdown").on("change", updatePlot);
+
+}).catch(error => {
+    console.error('Error loading the CSV file:', error);
+});
+
+
+    </script>
+</body>
+</html>
