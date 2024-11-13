@@ -63,6 +63,16 @@
             display: inline-block;
         }
 
+        #acknowledgements {
+            position: fixed;
+            bottom: 10px;
+            left: 20px;
+            color: white;
+            font-family: "Overpass", sans-serif;
+            font-size: 14px;
+            line-height: 1.25;
+}
+
     </style>
 </head>
 <body>
@@ -106,7 +116,13 @@
 <!-- First scatter plot -->
 <div id="scatterplot1" class="scatterplot"></div>
 
-    <script>
+<div id="acknowledgements">
+    <p>Acknowledgements: <br>This dashboard was created by Rebecca Risch, using D3.js, <br> 
+        for the Dartmouth College Varsity Baseball Team. <br> Special thanks to Professor Robert Cooper for his help. <br>
+        Feel free to direct questions or comments <br> to the email address linked: <a href="mailto:beccar816@gmail.com" style="color: green;" >beccar816@gmail.com</a></p>
+</div>
+
+<script>
   // Load the CSV file
 
 d3.csv("DBB_data3.csv").then(data => {
