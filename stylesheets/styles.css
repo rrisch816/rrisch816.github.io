@@ -1,6 +1,6 @@
 body {
-  background-color: #fff;
-  padding:50px;
+  background-color: #ededed;
+  margin: 10% 5%;
   font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color:#595959;
   font-weight:400;
@@ -55,8 +55,8 @@ a:hover small {
 }
 
 .wrapper {
-  width:860px;
-  margin:0 auto;
+  margin: 0; /* 50px */
+  padding: 0;
 }
 
 blockquote {
@@ -138,7 +138,7 @@ header .left-section a:hover {
 
 header ul {
   list-style:none;
-  height:40px;
+  height: 40px;
   padding:0;
   background: #f4f4f4;
   border-radius:5px;
@@ -150,7 +150,7 @@ header li {
   width:89px;
   float:left;
   border-right:1px solid #e0e0e0;
-  height:40px;
+  height: 40px;
 }
 
 header li:first-child a {
@@ -245,8 +245,9 @@ main.wrapper {
 }
 
 section {
-  width:500px;
-  float:right;
+  width:auto;
+  max-width: 100%;
+  float:none;
   padding-bottom:50px;
 }
 
@@ -269,34 +270,61 @@ footer {
   -webkit-font-smoothing:subpixel-antialiased;
 }
 
-/* Flex container for the photo and text sections */
-.content-container {
-  display: flex; /* Enable Flexbox */
-  gap: 20px; /* Add space between the photo and text sections */
-  align-items: flex-start; /* Align sections at the top */
-}
-
 .photos {
+  flex: 0 0 auto;
   display: grid; /* Use grid layout */
   grid-template-columns: repeat(2, 1fr); /* 2 columns, equal width */
   gap: 20px; /* Space between images */
-  justify-content: center; /* Center the grid */
-  margin-bottom: 20px; /* Add space below the photo section */
+  justify-content: flex-start; /* Align the grid to the left */
+  margin-bottom: 20px; /*Add space below the photo section */
+  width: auto;
+  max-width: 500px; /* Increase the maximum width for larger photos */
 }
 
 .photos img {
   width: 100%; /* Force images to fill the grid cell */
   height: auto; /* Maintain aspect ratio */
-  aspect-ratio: 1; /* Optional: Ensures a consistent square box for all */
+  aspect-ratio: 1; /* Ensure consistent square boxes */
   object-fit: cover; /* Crops images to fit without distortion */
-  border-radius: 10px; /* Optional: Adds rounded corners */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow */
+  border-radius: 10px; /* Add rounded corners */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
 }
 
+.content-container {
+  display: flex;
+  align-items: flex-start; /* Align photos and text at the top */
+  justify-content: space-between; /* Distribute space between sections */
+  gap: 40px; /* Adjust as needed to control spacing between photos and text */
+}
 
-/* Text Section */
 .text {
-  flex: 1; /* Allow text section to take up available space */
+  flex: 1; /* Allow the text section to grow to fill remaining space */
+  flex-grow: 1;
+  width: auto;
+  padding: 10px 0px; /* Maintain consistent padding */
+  margin-top: -10px; /* Keep alignment adjustment */
+  margin-left: 0;
+}
+
+.text ul.facts {
+  list-style: none; /* Remove default bullets */
+  padding: 0; /* Remove internal padding */
+  margin: 20px 0; /* Add space above and below the list */
+}
+
+.text ul.facts li {
+  font-size: 16px; /* Maintain a readable font size */
+  line-height: 2; /* Line spacing between items */
+  display: block; /* Ensure each item starts on a new line */
+  white-space: normal; /* Allow text to wrap if needed */
+  overflow-wrap: break-word; /* Break long words to prevent overflow */
+  max-width: 100%; /* Limit the width of each list item to trigger wrapping */
+  margin-bottom: 10px; /* Spacing between list items */
+}
+
+.text ul.facts li span {
+  line-height: 1.2; /* Tighter line spacing for wrapped lines */
+  display: inline; /* Keep inline layout for text content */
 }
 
 .text h1 {
@@ -310,6 +338,71 @@ footer {
   line-height: 1.6; /* Improve readability */
   color: #595959; /* Text color */
 }
+
+.facts {
+  list-style: none; /* Removes default list bullets */
+  padding: 0; /* Removes padding */
+  margin: 20px 0; /* Adds space around the list */
+}
+
+.facts li {
+  font-size: 16px; /* Adjusts text size */
+  line-height: 1.6; /* Improves readability */
+  color: #595959; /* Matches the paragraph color */
+  display: flex; /* Aligns emoji and text */
+  align-items: center; /* Centers emoji and text vertically */
+  gap: 10px; /* Adds space between emoji and text */
+}
+
+.facts li::before {
+  content: ''; /* No default bullet */
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.contact-list li {
+  margin-bottom: 10px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.contact-list a {
+  color: #00693e;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.contact-list a:hover {
+  color: #00b168;
+}
+
+.contact-list .icon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
+
+.pdf-container {
+  width: 100%; /* Full width of the container */
+  max-width: 800px; /* Optional: limit maximum width */
+  height: 600px; /* Define the height of the box */
+  margin: 20px auto; /* Center the box and add spacing */
+  border: 1px solid #ddd; /* Optional: border for the box */
+  overflow: hidden; /* Prevent overflow outside the box */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+}
+
+.pdf-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none; /* Remove default border */
+}
+
+
 
 @media print, screen and (max-width: 960px) {
 
