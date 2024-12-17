@@ -1,3 +1,95 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:96c34cb99853cc8e9f0e8249bb76cc0380cad02c5f3c4166d8d81471dc5d37fc
-size 1539
+rock_genrez,year,avg_popularity
+blues,1960,46
+blues,1968,49
+blues,1970,26
+blues,1972,35
+blues,1975,19
+blues,1976,46
+blues,1977,18
+blues,1978,49
+blues,1979,38
+blues,1980,35
+blues,1988,42
+blues,1989,37
+blues,1994,40
+blues,2000,26
+british,1964,2
+british,1965,46
+british,1966,2
+british,1968,20
+british,1972,23
+british,1974,8
+british,1976,12
+british,1978,26
+british,1980,11
+british,1986,49
+british,1991,14
+british,1995,23
+classic,1964,42
+classic,1967,13
+classic,1968,22
+classic,1970,7
+classic,1971,24
+classic,1972,18
+classic,1973,14
+classic,1977,32
+classic,1978,35
+classic,1981,24
+classic,1983,50
+classic,1984,37
+classic,1985,24
+classic,1987,17
+classic,1988,50
+classic,1989,24
+classic,1991,48
+country rock,1971,48
+country rock,1972,38
+country rock,1973,27
+country rock,1980,21
+country rock,1992,18
+country rock,2002,46
+country rock,2009,41
+hard,1975,31
+hard,1976,34
+hard,1978,28
+hard,1979,49
+hard,1981,46
+hard,1982,50
+hard,1984,24
+hard,1986,32
+hard,1987,31
+hard,2001,18
+metal,1975,44
+metal,1976,31
+metal,1979,49
+metal,1981,42
+metal,1982,14
+metal,1983,42
+metal,1984,45
+metal,1985,46
+metal,1987,40
+metal,1989,48
+metal,1990,27
+metal,1992,48
+metal,1997,38
+metal,2001,24
+metal,2005,50
+metal,2006,40
+metal,2008,17
+permanent wave,1986,36
+permanent wave,1987,50
+permanent wave,1991,12
+permanent wave,1994,17
+permanent wave,1995,32
+permanent wave,2005,16
+soft rock,1967,14
+soft rock,1971,21
+soft rock,1977,32
+soft rock,1979,32
+soft rock,1981,43
+soft rock,1982,22
+soft rock,1983,49
+soft rock,1987,33
+soft rock,1988,43
+soft rock,1990,45
+soft rock,1993,11
