@@ -1,3 +1,7 @@
+# Exclude this specific file from LFS
+projects/ADV/project3_billspot.csv -filter -diff -merge -text
+
+# General LFS rules
 *.csv filter=lfs diff=lfs merge=lfs -text
 *.svg filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text
