@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang = en>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Scribble&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Rubik+Scribble&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Rubik+Scribble&family=Teko:wght@300..700&display=swap" rel="stylesheet">
+    <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        circle:hover {
+            fill: gold;
+            stroke-width: 5px;
+        }
+
+        text {
+            font-size: 50px;
+            font-family: 'Trattatello', fantasy;
+        }
+
+    </style>
+</head>
+<body>
+    <svg width = "1000", height = "600">
+        <circle cx="64" cy="144" r="60" stroke="#FFDA09" stroke-width="3" fill="#0EA269"></circle>
+        <circle cx="112" cy="192" r="60" stroke="#FFDA09" stroke-width="3" fill="#287F5E"></circle>
+        <circle cx="160" cy="240" r="60" stroke="#FFDA09" stroke-width="3" fill="#01AB53"></circle>
+        <circle cx="208" cy="192" r="60" stroke="#FFDA09" stroke-width="3" fill="#287D80"></circle>
+        <circle cx="256" cy="144" r="60" stroke="#FFDA09" stroke-width="3" fill="#388028"></circle>
+        <circle cx="304" cy="192" r="60" stroke="#FFDA09" stroke-width="3" fill="#6DA261"></circle>
+        <circle cx="352" cy="144" r="60" stroke="#FFDA09" stroke-width="3" fill="#0EA269"></circle>
+        <circle cx="400" cy="192" r="60" stroke="#FFDA09" stroke-width="3" fill="#01AB53"></circle>
+        <circle cx="448" cy="144" r="60" stroke="#FFDA09" stroke-width="3" fill="#388028"></circle>
+        <circle cx="496" cy="96" r="60" stroke="#FFDA09" stroke-width="3" fill="#287F5E"></circle>
+        <circle cx="544" cy="144" r="60" stroke="#FFDA09" stroke-width="3" fill="#6DA261"></circle>
+        <circle cx="592" cy="192" r="60" stroke="#FFDA09" stroke-width="3" fill="#287D80"></circle>
+        <circle cx="640" cy="192" r="60" stroke="#FFDA09" stroke-width="3" fill="#0EA269"></circle>
+        <circle cx="688" cy="192" r="60" stroke="#FFDA09" stroke-width="3" fill="#CC2A2A"></circle>
+        <ellipse rx="8" ry="12" cx="672" cy="184" r="8" stroke="#FFDA09" stroke-width="2" fill="#388028"></ellipse>
+        <ellipse rx="8" ry="12" cx="704" cy="184" r="8" stroke="#FFDA09" stroke-width="2" fill="#388028"></ellipse>
+        <circle cx="688" cy="208" r="4" stroke-width="2" fill="#388028"></circle>
+
+        <polygon points="178,296 162,324 194,324" fill="#B39E2A" class="triangle"></polygon>
+        <polygon points="142,296 126,324 158,324" fill="#B39E2A" class="triangle"></polygon>
+
+        <polygon points="550,232 522,236 546,266" fill="#B39E2A" class="triangle"></polygon>
+        <polygon points="582,248 566,276 598,276" fill="#B39E2A" class="triangle"></polygon>
+
+        <polygon points="630,248 614,276 646,276" fill="#B39E2A" class="triangle"></polygon>
+
+        <path d="M 760 192 q 60 120 120 0" stroke="green" stroke-width="5" fill="red">
+            <animate attributeName="d" dur="4s" repeatCount="indefinite"
+                values="M 760 192 q 60 120 120 0;
+                        M 760 242 q 60 120 120 0;
+                        M 760 192 q 60 120 120 0"/>
+        </path>
+
+        <ellipse cx="790" cy="210" rx="4" ry="6" fill="black">
+            <animate attributeName="cy" dur="4s" repeatCount="indefinite"
+                values="210; 260; 210"/>
+        </ellipse>
+        <ellipse cx="850" cy="210" rx="4" ry="6" fill="black">
+            <animate attributeName="cy" dur="4s" repeatCount="indefinite"
+                values="210; 260; 210"/>
+        </ellipse>
+        <ellipse cx="820" cy="240" rx="4" ry="6" fill="black">
+            <animate attributeName="cy" dur="4s" repeatCount="indefinite"
+                values="240; 285; 240"/>
+        </ellipse>
+
+        <text x="400", y="400", color="red", fill="black"> The Very Hungry Caterpillar</text>
+
+    </svg>
+</body>
+
+
+</html>

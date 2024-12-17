@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="../../stylesheets/styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="left-section">
+            <a href="../../index.html">Rebecca Risch</a>
+        </div>
+        <nav>
+            <a href="../../index.html">About Me</a>
+            <a href="../../projects.html" class="active">Projects</a>
+            <a href = "../../resume.html"> Resume</a>
+            <a href="../../contact.html"> Contact</a>
+        </nav>
+    </header>
+
+    <main class="wrapper">
+        <h1>Dartmouth Varsity Baseball Team</h1>
+        <h2> <br> Custom Dashboard </h2>
+        <h3 class = "spaced-lines"> 
+            As the Data Analyst for the Dartmouth Baseball Team, I created this customized, interactive dashboard to house 
+            and visualize the team's data, from scratch. I identified a need and filled it - the TrackMan UI wasn't serving our team
+            well. We needed a way to visualize subsects of our data, conditioned on variables such as Pitcher, Batter, Date, Pitch Type,
+            etc.  The dashboard is dynamic, the visualizations automatically update themselves as the user changes the variable selectors. <br> <br>
+            I recently completed this first version, using D3.js, and R to clean and prepare the TrackMandata. A video demonstration of the dashboard 
+            is imbedded into this website below. One of my objectives has been to develop resources that the team can use and update for years 
+            to come – I am passionate about data democratization and building user-friendly, long-lasting tools. Dartmouth 
+            Baseball has never before had a team analyst, and so I have been given total creative freedom in organizing, 
+            storing, analyzing, and presenting their data. It has been an invaluable and extremely enjoyable experience for me; 
+            it has been very hands-on. I feel like I am working in an impactful role and my work has made tangible differences.
+        </h3>
+        <div class="youtube-container">
+            <iframe
+                src="https://www.youtube.com/embed/EEddEZcI-Y4"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2> <br> <br> Player Performance Reporting </h2>
+
+        <h3 class = "spaced-lines">
+            Our first main performance objective was to decrease the number of swings-and-misses, first by 
+            understanding the pitches at which our batters are swinging and not making contact. I operate TrackMan to collect the data, 
+            clean and process the data, and wrote functions in Python to generate zone charts with matplotlib. The functions take in parameters
+            such as a list of dates, a list of batters, and an event (e.g. swing and miss), filters down the data, and outputs the associated plot,
+            colored by pitch type. 
+            Below are some examples:
+        </h3>
+
+        <img src="swm.jpeg" alt="Team Swings and Misses" class="image-style">
+        <img src="ip.jpeg" alt="Balls in Play" class="image-style">
+
+    </main>
+
+
+</body>
+</html>

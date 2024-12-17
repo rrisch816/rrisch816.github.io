@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Scribble&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Rubik+Scribble&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Rubik+Scribble&family=Teko:wght@300..700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        svg {
+            outline: thin dashed red;
+            background-color: white;
+        }
+
+        text {
+            font-size: 20px;
+            font-family: "Cambria", serif;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const width = window.innerWidth,
+              height = window.innerHeight;
+
+        const svg = d3.select('body')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height);
+
+        const parseRow = (d) => {
+          d.rock_genrez = d.rock_genrez;
+          d.avg_popularity = +d.avg_popularity;
+          d.year = +d.year;
+          return d;
+        }
+
+        const billspot = "./project3_billspot.csv"
+
+        d3.csv(billspot, parseRow).then(function(data){
+            console.log(data);
+
+            const xValue = (d) => d.year;
+            const yValue = (d) => d.avg_popularity;
+            const grouping = (d) => d.rock_genrez;
+
+            const margin = {
+              top: 75, 
+              left: 100, 
+              right: 75, 
+              bottom: 75,
+            };
+
+            const x = d3.scaleLinear()
+                .domain(d3.extent(data, xValue))
+                .range([margin.left, width - margin.right]);
+
+            const y = d3.scaleLinear()
+                .domain([51, 1])
+                .range([height - margin.bottom, margin.top]);
+
+            const color = d3.scaleOrdinal()
+                .domain(["blues", "british", "classic", "country rock", "hard", "metal", "permanent wave", "soft rock"])
+                .range(["#3c6997", "#DA553B", "#EDC02D", "#10621F", "#79338A", "#080808", "#74BBAD", "#DA5BD3"]);
+
+            const groupedData = d3.groups(data, d => d.rock_genrez);
+
+            const points = data.map((d) => ({
+                x: x(xValue(d)),
+                y: y(yValue(d)),
+                genre: grouping(d),
+                year: xValue(d)
+            }));
+
+            const linez = d3.line()
+                .x(d => x(xValue(d)))
+                .y(d => y(yValue(d)));
+
+            points.sort((a, b) => a.x - b.x);
+
+            svg.selectAll('circle')
+                .data(points)
+                .enter()
+                .append('circle')
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y)
+                .attr('r', 7)
+                .attr('opacity', 0)
+                .attr('fill', d => color(d.genre))
+                .transition()
+                .delay(d => {
+                    const delay = (d.year - d3.min(data, xValue) + 1) * 1000;
+                    return delay;
+                })
+                .duration(500)
+                .attr('opacity', 1);
+
+            groupedData.forEach(([rock_genrez, values]) => {
+                let cumulativeDelay = 0;
+                const groupStartDelay = (values[0].year - d3.min(data, xValue) + 1) * 1000;
+
+                values.forEach((value, index) => {
+                    if (index < values.length - 1) {
+                        const segment = [values[index], values[index + 1]];
+                        const path = svg.append("path")
+                            .datum(segment)
+                            .attr("fill", "none")
+                            .attr("stroke", color(rock_genrez))
+                            .attr('opacity', 0.7)
+                            .attr("stroke-width", 7)
+                            .attr("d", linez)
+                            .attr("class", `group-path-${rock_genrez}`)
+                            .each(function() { 
+                                const totalLength = this.getTotalLength();
+                                d3.select(this)
+                                  .attr("stroke-dasharray", totalLength + " " + totalLength)
+                                  .attr("stroke-dashoffset", totalLength);
+                            });
+
+                        const duration = 1000 * (segment[1].year - segment[0].year);
+
+                        path.transition()
+                            .delay(cumulativeDelay + groupStartDelay)
+                            .duration(duration)
+                            .attr("stroke-dashoffset", 0)
+                            .ease(d3.easeLinear);
+                        
+                        cumulativeDelay += duration;
+                    }
+                });
+            });
+
+            let yTicks = y.ticks();
+            if (!yTicks.includes(1)) {
+                yTicks.push(1);
+            }
+
+            const yAxis = d3.axisLeft(y).tickValues(yTicks);
+            const yAxisGroup = svg.append('g')
+              .attr('transform', `translate(${margin.left}, 0)`)
+              .call(yAxis);
+            
+            let xTicks = x.ticks();
+            if (!xTicks.includes(2010)) {
+                yTicks.push(2010);
+            }
+
+            const xAxis = d3.axisBottom(x).tickFormat(d3.format("d")).tickValues(xTicks);
+            const xAxisGroup = svg.append('g')
+              .attr('transform', `translate(0, ${height - margin.bottom})`)
+              .call(xAxis);
+
+            xAxisGroup.selectAll('.tick text')
+              .attr('opacity', 0);
+
+            xAxisGroup.selectAll('.tick text')
+              .transition()
+              .delay(d => {
+                  const delay = (d - d3.min(data, xValue) + 1) * 1000;
+                  return delay;
+              })
+              .duration(500)
+              .attr('opacity', 1);
+
+            svg.append('text')
+              .attr('x', width / 2)
+              .attr('y', margin.top / 2)
+              .attr('text-anchor', 'middle')
+              .style("font-size", "24px") 
+              .attr('font-family', 'Cambria') 
+              .text("Rock Music Popularity By Genre Over Time");
+
+            svg.append('text')
+              .attr('x', width / 2)
+              .attr('y', margin.top + 650)
+              .attr('text-anchor', 'middle')
+              .style("font-size", "16px") 
+              .attr('font-family', 'Cambria') 
+              .text("Year");
+
+            svg.append("text")
+              .attr("x", margin.top - 230)             
+              .attr("y", height - 425)
+              .style("font-size", "16px") 
+              .attr('transform', 'rotate(-90 10 300)')  
+              .attr('font-family', 'Cambria') 
+              .text("Average Spot on the Billboard Top 100");
+
+            const legend = svg.append("g")
+                .attr("transform", `translate(${width - margin.right + 30}, ${margin.top - 40})`);
+
+            const legendData = color.domain()
+                .map(d => ({ 
+                    label: d, 
+                    color: color(d) 
+                }));
+
+            legend.selectAll("circle")
+              .data(legendData)
+              .enter()
+              .append("circle")
+              .attr("cx", -margin.right - 50)
+              .attr("cy", (d, i) => i * 25)
+              .attr("r", 7)
+              .attr("stroke", "black")
+              .attr("fill", d => d.color)
+              .attr("opacity", 0.7);
+
+            legend.selectAll("text")
+              .data(legendData)
+              .enter()
+              .append("text")
+              .attr("x", -margin.right - 35)
+              .attr("y", (d, i) => i * 25)
+              .attr("dy", ".35em")
+              .text(d => d.label);
+
+        });
+
+    </script>
+</body>
+</html>

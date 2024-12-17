@@ -34,6 +34,10 @@ h3, h4, h5, h6 {
   font-weight: 500;
 }
 
+.spaced-lines {
+  line-height: 1.8;
+}
+
 a {
   color:#222;
   text-decoration:none;
@@ -134,6 +138,16 @@ header .left-section a {
 header .left-section a:hover {
   color: #00693e; /* Hover color */
 }
+
+h2 .green-link {
+  color: #00693e; /* Dark green */
+  text-decoration: none; /* Optional: removes underline */
+}
+
+h2 .green-link:hover {
+  color: #00b168; /* Lighter green on hover */
+}
+
 
 
 header ul {
@@ -400,6 +414,300 @@ footer {
   width: 100%;
   height: 100%;
   border: none; /* Remove default border */
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.adv-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+.adv-photo-grid img {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: 450px;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.adv-photo-grid figure {
+  margin: 0;
+  text-align: center;
+  width: fit-content;
+}
+
+.adv-photo-grid figcaption {
+  margin-top: 8px; /* Add a small space between the image and caption */
+  font-size: 16px; /* Smaller font size for the caption */
+  color: #555; /* Subtle text color */
+  width: 100%; /* Ensure the caption stays within the image width */
+  max-width: 400px;
+  word-wrap: break-word;
+  display: inline-block;
+  text-align: center;
+}
+
+.adv-proj1-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+.adv-proj1-grid .vertical {
+  width: 100%;
+  height: 400px;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.adv-proj1-grid .horizontal {
+  width: 100%;
+  height: 400px;
+  max-width: 570px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.adv-proj1-grid figure {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  text-align: center;
+  width: fit-content;
+}
+
+.adv-proj1-grid img {
+  width: 100%; 
+  max-width: 500px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.adv-proj1-grid figcaption {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
+  text-align: center; /* Center-align the text within the caption */
+  width: 100%; /* Ensure caption takes up the same width as the image */
+  word-wrap: break-word; /* Prevent overflow for long text */
+  display: inline-block; /* Keep the caption within the inline layout of the figure */
+  text-align: center; /* Ensure caption text is centered */
+}
+
+.adv-proj1-grid figure:nth-child(1) figcaption {
+  max-width: 300px; /* Same as the 'vertical' image */
+}
+
+.adv-proj1-grid figure:nth-child(2) figcaption {
+  max-width: 470px; /* Same as the 'horizontal' image */
+}
+
+.photo-item {
+  position: relative; /* Allows positioning the label over the image */
+  width: 390px;
+  height: 390px;
+  overflow: hidden; /* Ensures content stays within bounds */
+  text-decoration: none; /* Remove underline for links */
+  display: block; /* Ensure the entire area is clickable */
+  border-radius: 30px; /* Optional: Rounded corners for the entire block */
+  transition: opacity 0.3s ease; /* Smooth hover effect */
+  opacity: 0.8; /* Default slightly opaque state for the entire block */
+}
+
+.photo-item:hover {
+  opacity: 0.5; /* Further reduce opacity on hover for the entire block */
+}
+
+.photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image fills the box without distortion */
+  border-radius: 30px; /* Match the container's corners */
+  transition: transform 0.3s ease; /* Optional: Add scaling effect */
+}
+
+.photo-item:hover img {
+  transform: scale(1.05); /* Slightly zoom in on hover */
+}
+
+.photo-item .label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centers the label */
+  color: #ededed;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Add shadow for better readability */
+  text-align: center;
+  pointer-events: none; /* Prevent the label from interfering with hover */
+}
+
+.adv-HTML{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.adv-HTML-item {
+  width: 1100px;
+  height: 600px;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+  transition: opacity 0.3s ease;
+  opacity: 0.8;
+}
+
+.adv-HTML-item:hover {
+  opacity: 0.5; /* Further reduce opacity on hover for the entire block */
+}
+
+.adv-HTML-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image fills the box without distortion */
+  transition: transform 0.3s ease; /* Optional: Add scaling effect */
+}
+
+.adv-HTML-item:hover img {
+  transform: scale(1.05); /* Slightly zoom in on hover */
+}
+
+.adv-HTML figure{
+  margin: 0 auto;
+  text-align: center;
+  width: fit-content;
+}
+
+.adv-HTML figcaption {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
+  text-align: center; /* Center-align the text within the caption */
+  width: 100%; /* Ensure caption takes up the same width as the image */
+  max-width: 1100px;
+  word-wrap: break-word; /* Prevent overflow for long text */
+  display: inline-block; /* Keep the caption within the inline layout of the figure */
+  text-align: center; /* Ensure caption text is centered */
+}
+
+.adv-map{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  max-width: 100%;
+}
+
+.adv-map figure{
+  margin: 0 auto;
+  text-align: center;
+  width: fit-content;
+}
+
+.adv-map img{
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  border-radius: 10px;
+  width: 700px;
+  height: auto;
+}
+
+.adv-map figcaption {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
+  text-align: center; /* Center-align the text within the caption */
+  width: 100%; /* Ensure caption takes up the same width as the image */
+  max-width: 700px;
+  word-wrap: break-word; /* Prevent overflow for long text */
+  display: inline-block; /* Keep the caption within the inline layout of the figure */
+  text-align: center; /* Ensure caption text is centered */
+}
+
+.hw3gif{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  max-width: 100%;
+}
+
+.hw3gif figure{
+  margin: 0 auto;
+  text-align: center;
+  width: fit-content;
+}
+
+.hw3gif img{
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  border-radius: 10px;
+  width: 600px;
+  height: auto;
+}
+
+.hw3gif figcaption {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
+  text-align: center; /* Center-align the text within the caption */
+  width: 100%; /* Ensure caption takes up the same width as the image */
+  max-width: 600px;
+  word-wrap: break-word; /* Prevent overflow for long text */
+  display: inline-block; /* Keep the caption within the inline layout of the figure */
+  text-align: center; /* Ensure caption text is centered */
+}
+
+.youtube-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px; /* Optional: Set a max width for the video */
+  margin: 20px auto; /* Center the container on the page */
+  overflow: hidden;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+}
+
+.youtube-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none; /* Remove iframe border */
+}
+
+.image-style {
+  display: block; /* Ensures the image appears on a new line */
+  margin: 20px auto; /* Centers the image and adds spacing */
+  width: 100%; /* Makes the image responsive */
+  max-width: 800px; /* Optional: Set a maximum width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Optional: Add rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
 }
 
 
