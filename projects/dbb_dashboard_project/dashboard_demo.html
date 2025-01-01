@@ -23,16 +23,18 @@
     <main class="wrapper">
         <h1>Dartmouth Varsity Baseball Team</h1>
         <h2> <br> Custom Dashboard </h2>
-        <h3 class = "spaced-lines"> 
-            As the Data Analyst for the Dartmouth Baseball Team, I created this customized, interactive dashboard to house 
-            and visualize the team's data, from scratch. I identified a need and filled it - the TrackMan UI wasn't serving our team
+        <h3 class = "tabbed-in"> 
+            As the Data Analyst for the Dartmouth Baseball Team, I created this customized, interactive dashboard from scratch to house 
+            and visualize the team's data. I identified a need and filled it - the TrackMan UI wasn't serving our team
             well. We needed a way to visualize subsects of our data, conditioned on variables such as Pitcher, Batter, Date, Pitch Type,
-            etc.  The dashboard is dynamic, the visualizations automatically update themselves as the user changes the variable selectors. <br> <br>
-            I recently completed this first version, using D3.js, and R to clean and prepare the TrackMandata. A video demonstration of the dashboard 
-            is imbedded into this website below. One of my objectives has been to develop resources that the team can use and update for years 
-            to come – I am passionate about data democratization and building user-friendly, long-lasting tools. Dartmouth 
-            Baseball has never before had a team analyst, and so I have been given total creative freedom in organizing, 
-            storing, analyzing, and presenting their data. It has been an invaluable and extremely enjoyable experience for me; 
+            etc.  The dashboard is dynamic, the visualizations automatically update themselves as the user changes the variable selectors.
+            I recently completed this first version using D3.js. I also used R to clean and prepare the TrackMandata. A video demonstration of the dashboard 
+            is imbedded into this website below. <br> <br> My driving goal behind any project I do for the team is to best serve the coaches and the players. 
+            That includes the development of robust resources that the team can use and update for years to come, past my graduation. 
+            I am very passionate about data democratization, data communication, and building user-friendly, long-lasting tools.
+            One of the main benefits of creating this dashboard from scratch and in-house is that I can easily implement the coaches feedback and requests, 
+            working to align the tool closely to their needs. Dartmouth Baseball has never before had a team analyst, and so I have been given total 
+            creative freedom in organizing, storing, analyzing, and presenting their data. It has been an invaluable and extremely enjoyable experience for me; 
             it has been very hands-on. I feel like I am working in an impactful role and my work has made tangible differences.
         </h3>
         <div class="youtube-container">
@@ -46,13 +48,14 @@
 
         <h2> <br> <br> Player Performance Reporting </h2>
 
-        <h3 class = "spaced-lines">
-            Our first main performance objective was to decrease the number of swings-and-misses, first by 
-            understanding the pitches at which our batters are swinging and not making contact. I operate TrackMan to collect the data, 
-            clean and process the data, and wrote functions in Python to generate zone charts with matplotlib. The functions take in parameters
-            such as a list of dates, a list of batters, and an event (e.g. swing and miss), filters down the data, and outputs the associated plot,
-            colored by pitch type. 
-            Below are some examples:
+        <h3 class = "tabbed-in">
+            Our first main performance objective was to decrease the number of swings-and-misses, first by understanding the pitches at 
+            which our batters are swinging and not making contact. I operate TrackMan to collect the data, clean and process the data, 
+            and write functions in Python to generate zone charts with matplotlib. The functions take in parameters such as a list of dates, 
+            a list of batters, and an event (e.g. swing and miss), filter down the data, and output the associated plot, colored by pitch type. 
+            These charts were created before my interactive dashboard. Now, with the dashboard, the coaches can generate similar charts at the 
+            click of a button, and view many more metrics at a time, without needing me to write more code or prepare more data.  
+            Below are some examples of these early charts:
         </h3>
 
         <img src="swm.jpeg" alt="Team Swings and Misses" class="image-style">

@@ -16,7 +16,7 @@ p, ul, ol, table, pre, dl {
 }
 
 h1, h2, h3 {
-  line-height:1.1;
+  line-height:1.3;
 }
 
 h1 {
@@ -34,17 +34,23 @@ h3, h4, h5, h6 {
   font-weight: 500;
 }
 
+.tabbed-in {
+  font-weight: 350;
+  margin: 10px;
+  line-height: 1.8;
+}
+
 .spaced-lines {
   line-height: 1.8;
 }
 
 a {
-  color:#222;
+  color:#00693e;
   text-decoration:none;
 }
 
 a:hover {
-  color:#069;
+  color:#00b168;
 }
 
 a small {
@@ -148,8 +154,6 @@ h2 .green-link:hover {
   color: #00b168; /* Lighter green on hover */
 }
 
-
-
 header ul {
   list-style:none;
   height: 40px;
@@ -214,7 +218,7 @@ nav ul {
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 20px; /* Space between links */
+  gap: 20px;
 }
 
 nav ul li {
@@ -223,12 +227,12 @@ nav ul li {
 
 nav ul li a {
   text-decoration: none; /* Removes underline */
-  color: #222; /* Dark text color */
+  color: #00693e; /* Dark text color */
   font-weight: bold;
 }
 
 nav ul li a:hover {
-  color: #007bff; /* Blue color on hover */
+  color: #00b168; /* Blue color on hover */
 }
 
 header nav {
