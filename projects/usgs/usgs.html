@@ -25,17 +25,43 @@
         
         <h2> <br> Flood Damage Modeling – Python</h2>
             <h3 class = "tabbed-in"> 
+                One of the main projects I worked on was modeling flood damages of the Charles River Basin in Python and the Hazus Flood Assessment Structure Tool (FAST). 
+                Hazus is a nationally standardized risk modeling methodology managed by FEMA's Natural Hazards Risk Assessment Program.
+                According to FEMA, "Hazus identifies areas with high risk for natural hazards and estimates physical, economic, and social impacts of earthquakes, hurricanes, floods, and tsunamis."
+                FAST was built to calculate building-level flood impacts with user-provided building and flood depth data. It assigns depth damage functions to buildings according to their occupancy type, first floor elevation, foundation type, and number of stories. 
+                Flood depth is then extracted at every building and used as a depth damage function parameter to calculate flood losses in dollars.
+                The Charles River Basin encompasses 300 square miles of terrain, and notably includes Greater Boston. 
+                I operated FAST to model potential damage in the Charles River Basin corresponding with differing flood severities, 
+                and then aggregated and analyzed the damage at the census block level, up from the building level. 
+                Additionally, I wrote scripts to dynamically update federal databases, specifically by cross referencing datasets to consolidate local government contacts and information as a resource in case of natural disaster. 
             </h3>
         
         <h2> <br> <br> Flood Mapping – ArcGIS</h2>
-            <h3 class = "tabbed-in"> </h3>
+            <h3 class = "tabbed-in"> 
+                The other main project I worked on was the FEMA RiskMAP floodplain mapping project. FEMA has to keep its floodplain maps
+                updated for the purpose of issuing flood insurance policies and managing natural disaster emergency response, and they contract the New England Water Science Center
+                to do so. <br> <br> Flood severity is defined by both extent and risk over time. For example, a 100-year flood is expected to occur once every 
+                100 years on average, or have a 1% chance of occurring each year. A 50-year flood has a 2% chance of occurring each year, and will be less severe than the 100-year flood. 
+                We geospatially define floodways based on these categorizations. According to the USGS, "changes in local land use, new river impoundments, changes in the amount of impervious surfaces, 
+                and long-term climate patterns" can change the extents of the flood events, and therefore, the definitions of the flooding recurrence intervals. 
+                The flood severities and categorizations change, and so to must the floodplain maps. <br> <br> Throughout my time at the USGS,
+                I worked in ArcGIS Pro to help with postprocessing of the Housatonic River Basin. Stream by stream, I mapped special flood hazard areas, floodways, cross sections, hydraulic structures, map annotation, 
+                and other critical flood-related geospatial aspects. <br> <br>
+            </h3>
+        <section class = "adv-photo-grid">
+            <img src = "intern3.jpeg" alt = "Intern 3">
+            <img src = "intern4.jpeg" alt = "Intern 4">
+        </section>
         
-        <h2> <br> <br> Fieldwork – High Water Mark Surveying</h2>
+        <h2> Fieldwork – High Water Mark Surveying</h2>
         <h3 class = "tabbed-in"> To gain more exposure to fieldwork, I assisted with a surveying project for a few days. 
-            The Hydrologic Technician and I visited several high water marks from [flood ?] in December 2023. [Facts about flood (unusual, damaging)]. 
-            During the flood event, USGS technicians were able to go out and place high water marks for later surveying, designating the spatial extent and [rise] of the flood. 
+            The Hydrologic Technician and I visited several high water marks from a major flood event in December 2023. 
+            According to the USGS, "a slow-moving rainstorm accompanied by 50-60 mph winds and high dewpoints resulted in 4 to 8 inches of rainfall (48-hour total) 
+            and an average snowmelt of 1.5 to 2.5 inches. The high amount of rainfall, snowmelt, and runoff caused multiple rivers and tributaries to peak at record levels, 
+            in some cases exceeding previous records set by the historic flood of April 1987."
+            During the flood event, USGS technicians were able to go out and place high water marks for later surveying, designating the spatial extent and crest of the flood. 
             We located the markers (tokens attached to trees, small flags planted, etc.) and set up a high powered GPS to triangulate the markers' precise locations and elevations.
-            The project was contracted by FEMA, and they would go on to use the data to precisely map the flood and finalize their reporting on the storm event with much more accurate [data]. 
+            The project was contracted by FEMA, and they would go on to use the data to precisely map the flood and finalize their reporting on the storm event with finalized, accurrate metrics. 
             It was nice to get out of the office for a bit and explore the local nature from a new perspective. 
             </h3>
         <ul class="facts">
