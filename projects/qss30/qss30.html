@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="../../stylesheets/styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="left-section">
+            <a href="../../index.html">Rebecca Risch</a>
+        </div>
+        <nav>
+            <a href="../../index.html">About Me</a>
+            <a href="../../projects.html" class="active">Projects</a>
+            <a href = "../../resume.html"> Resume</a>
+            <a href="../../contact.html"> Contact</a>
+        </nav>
+    </header>
+
+    <main class="wrapper">
+        <h1>  QSS 19 Course: Advanced Data Visualization </h1>
+        <h2> Term Project </h2>
+        <h2> <br> TLDR: </h2>
+        <h3 class="tabbed-in">
+            This past semester I took Dartmouth’s sports analytics course. For our final project, 
+            my group decided to do a Markov Chain analysis of the College Football Overtime structure
+            to determine if there was an inherent benefit in, after winning the coin toss, deferring
+            the ball and setting up on defense first. We set up a matrix to represent the Markov Chain
+            - the states were defined by the game situation (possession, score, overtime period, 
+            and frame of the overtime (going first or responding)). We then ran the matrix through 
+            the PyMC library and analyzed historical play-by-play data in R to find the transition 
+            probabilities from state to state, which were based on average touchdown success rate, 
+            field goal success rate, two-point conversion rate, etc, across the Power Five since the overtime 
+            structure rule change. We found that, between two evenly ranked teams regarding scoring success rates, 
+            the team that goes second has a 51% chance of winning the game.
+        </h3>
+        <h2> <br> Project Report</h2>
+        <div class="pdf-container">
+            <iframe src="report.pdf" frameborder="0"></iframe>
+        </div>
+        <h2> <br> <br> Project Presentation </h2>
+        <div class="pdf-container">
+            <iframe src="presentation.pdf" frameborder="0"></iframe>
+        </div>
+        <h2><br><br> R Code </h2>
+        
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+        <div class="code-container">
+        <pre><code class="language-r">
+            # Rebecca Risch
+            # QSS 30.01 Sports Analytics
+            
+            library(cfbfastR)
+            library(tidyverse)
+            library(dplyr)
+            library(ggplot2)
+            library(stringr)
+            
+            # List of all Power Five teams for 2024
+            power_five_teams <- c(
+              "Boston College", "California", "Clemson", "Duke", "Florida State", "Georgia Tech", 
+              "Louisville", "Miami", "North Carolina", "NC State", "Pittsburgh", "SMU", 
+              "Stanford", "Syracuse", "Virginia", "Virginia Tech", "Wake Forest", 
+              "Illinois", "Indiana", "Iowa", "Maryland", "Michigan", "Michigan State", 
+              "Minnesota", "Nebraska", "Northwestern", "Ohio State", "Oregon", "Penn State", 
+              "Purdue", "Rutgers", "Southern California", "UCLA", "Washington", "Wisconsin",
+              "Arizona", "Arizona State", "BYU", "Baylor", "Cincinnati", "Central Florida", 
+              "Colorado", "Houston", "Iowa State", "Kansas", "Kansas State", "Oklahoma State", 
+              "TCU", "Texas Tech", "Utah", "West Virginia",
+              "Alabama", "Arkansas", "Auburn", "Florida", "Georgia", "Kentucky", "LSU", 
+              "Mississippi", "Mississippi State", "Missouri", "Oklahoma", "South Carolina", 
+              "Tennessee", "Texas", "Texas A&M", "Vanderbilt",
+              "Oregon State", "Washington State"
+            )
+            
+            # Years of full season play since 2021 rule change
+            years <- c(2021, 2022, 2023)
+            
+            pbp5 <- load_cfb_pbp(seasons = years)%>%
+              filter(home %in% power_five_teams & away %in% power_five_teams)
+            
+            pbp5_cols <- colnames(pbp)
+            pbp5_cols
+            
+            # view(pbp5[1, ])
+            
+            ## ASSUMPTION 1: Defensive Touchdowns and Safeties - 25 Yards To Goal
+            safety_assumption <- pbp5%>%
+              filter(yards_to_goal <= 25) %>%
+              filter(safety == 1) %>%
+              summarise(n = n())
+            
+            safety_assumption
+            # 0 safeties where driving team within 25 yards to goal
+            
+            
+            defensive_scoring_25yds_plays <- pbp5%>%
+              filter(yards_to_goal <= 25) %>%
+              filter(defense_score_play == 1) 
+            
+            defensive_scorings_25yds_plays_n <- defensive_scoring_25yds_plays %>%
+              summarise(n = n())
+            
+            defensive_scorings_25yds_plays_n
+            # 28 defensive touchdowns 
+            
+            defensive_scorings_25yds_games <- defensive_scoring_25yds_plays %>%
+              distinct(game_id, .keep_all = TRUE) %>%
+              summarise(n = n())
+            
+            defensive_scorings_25yds_games
+            
+            defensive_scoring_25yds_opportunities <- pbp5 %>% # plays_25 yds
+              filter(yards_to_goal <= 25) %>%
+              summarise(n = n())
+              
+            defensive_scoring_25yds_opportunities
+            
+            assumption1 = (defensive_scorings_25yds_plays_n / defensive_scoring_25yds_opportunities) * 100
+            assumption1
+            
+            ## Extra Info, as Later Resource
+            number_of_games <- pbp5%>%
+              summarise(number_of_games = n_distinct(game_id))
+            
+            number_of_games
+            
+            plays <- pbp5%>%
+              summarise(number_of_plays = n())
+            
+            plays
+            
+            #view(pbp5%>%filter(week == 1))
+            
+            ## 
+            
+            #df <- pbp5 %>%
+              #mutate(increase_by_8 = pos_team_score - lag(pos_team_score),
+              #same_teams = pos_team == lag(pos_team) & def_pos_team == lag(def_pos_team))%>%
+              #filter((increase_by_8 == 8 & same_teams) | (lead(increase_by_8 == 8) & lead(same_teams)))
+            #view(df)
+            
+            ## Assumption 2: No team will attempt a two point conversion in the first overtime
+            two_pt_conversion_first_OT <- pbp5 %>%
+              filter(period == 5) %>%
+              filter(str_detect(play_text, "Two-Point Conversion")) %>%
+              summarise(n = n())
+            two_pt_conversion_first_OT
+            
+            
+            plays_in_first_OT <- pbp5 %>%
+              filter(period == 5) %>%
+              summarise(unique_drives = n_distinct(id_drive))
+            plays_in_first_OT
+            
+            percentage_two_pt_conversion_first_OT = 100 * (two_pt_conversion_first_OT / plays_in_first_OT)
+            percentage_two_pt_conversion_first_OT
+            
+            # 3. Teams will not miss extra points.
+            xtra_pt_success <- pbp5 %>%
+              filter(str_detect(play_text, "\\b(?i)kick\\b")) %>%
+              filter(str_detect(play_type, "\\b(?i)touchdown\\b")) %>%
+              summarise(n = n())
+            xtra_pt_success
+            
+            xtra_pt_fail <- pbp5%>%
+              filter(str_detect(play_text, "(?i)pat missed")) %>%
+              filter(str_detect(play_type, "\\b(?i)touchdown\\b"))%>%
+              summarise(n = n())
+            xtra_pt_fail
+            
+            pat_success_rate = (xtra_pt_success / (xtra_pt_success + xtra_pt_fail)) * 100
+            pat_success_rate
+            
+            #4. A team with the opportunity to win the game with any score will simply attempt a field goal from
+            #inside 25 yards.
+            period_5_6 <- pbp5 %>%
+              filter(period == 5 | period == 6) %>%
+              select(c(id_play, game_id, period, pos_team, def_pos_team, pos_team_score, def_pos_team_score, play_type, play_text, change_of_pos_team, score_diff, down, drive_event_number, drive_num, id_drive, yards_to_goal)) %>%
+              arrange(game_id, id_drive)
+            #view(period_5_6)
+            
+            possession_iding <- period_5_6 %>%
+              group_by(game_id, period) %>%
+              mutate(possession_number = cumsum(if_else(row_number() == 1 | lag(change_of_pos_team, default = 0) == 1, 1, 0))) %>%
+              ungroup() %>%
+              select(c(id_play, game_id, period, pos_team, def_pos_team, possession_number, pos_team_score, def_pos_team_score, play_type, play_text, yards_to_goal, change_of_pos_team, score_diff, down, drive_event_number, drive_num, id_drive, yards_to_goal))
+            #view(possession_iding)
+            
+            second_pos <- possession_iding %>%
+              group_by(game_id) %>%
+              filter(all(possession_number <= 2)) %>%
+              ungroup()
+            
+            qualifying_games <- second_pos %>%
+              filter(possession_number == 2) %>%
+              group_by(game_id) %>%
+              slice_min(order_by = row_number(), with_ties = FALSE) %>%
+              filter(score_diff == 0) %>%
+              pull(game_id)
+            
+            tied_second_pos <- second_pos %>%
+              filter(game_id %in% qualifying_games)
+            
+            #view(tied_second_pos)
+            tied_second_pos_game_count <- tied_second_pos %>%
+              summarise(n = n_distinct(game_id))
+                        
+            tied_second_pos_game_count
+            
+            # After filtering to find games that were still tied in the 5th or 6th period, after the first possession, 
+            # upon visually combing through the descriptions of the plays of the few games in which this occurred, we found that categorically, 
+            # all second-possession teams in our dataset first rushed for a few yards, seemingly to further secure their chance at a successful field goal 
+            # and then kicked for said field goal on the fourth down.  
+            
+            #view(pbp5 %>% select(c(id_play, game_id, period, pos_team, def_pos_team, pos_team_score, def_pos_team_score, play_type, play_text, down, drive_event_number, drive_num, id_drive, yards_to_goal, change_of_pos_team, lag_pos_team, score_diff)))
+            
+            #5. A team with first possession in the first overtime will kick a field goal on the majority of fourth downs,
+            # to avoid risking a failed touchdown and no points scored.
+            #view(possession_iding)
+            period5p1d4 <- possession_iding %>%
+              filter(period == 5 & possession_number == 1 & down == 4) %>%
+              filter(!str_detect(play_type, "Timeout") & !str_detect(play_type, "Penalty")) 
+            #view(period5p1d4)
+            
+            assumption5_fgs <- period5p1d4 %>% 
+              filter(str_detect(play_type, "\\b(?i)field goal\\b")) %>%
+              summarise(n = n())
+            
+            assumption5_fgs
+            view(assumption5_fgs)
+            
+            assumption5_drives <- period5p1d4 %>%
+              summarise(n = n())
+            
+            assumption5 <- (assumption5_fgs/assumption5_drives) * 100
+            assumption5
+            
+            #6. The difference in field goal percentages inside 25 yards is negligible (potentially look into ways to verify this assumption).
+            # made_fgs <- pbp5 %>%
+            #   group_by(game_id, id_drive) %>%
+            #   filter(
+            #     any(down == 1 & yards_to_goal >= 23 & yards_to_goal <= 27) &
+            #     any(str_detect(play_text, "(?<!\\S)FG GOOD(?!\\S)"))) %>%
+            #   ungroup() %>%
+            #   select(c(id_play, game_id, period, pos_team, def_pos_team, play_type, play_text, int_td, down, yards_to_goal, drive_event_number, drive_num, id_drive, change_of_pos_team)) %>%
+            #   arrange(id_play, game_id)
+            # #view(made_fgs)
+            # 
+            # made_fgs_count <- made_fgs %>%
+            #   summarise(unique_drives = n_distinct(id_drive))
+            # 
+            # made_fgs_count
+            # 
+            # all_2327_drives <- pbp5 %>%
+            #   group_by(game_id, id_drive) %>%
+            #   filter(
+            #     any(down == 1 & yards_to_goal >= 23 & yards_to_goal <= 27)) %>%
+            #   ungroup() %>%
+            #   select(c(id_play, game_id, period, pos_team, def_pos_team, play_type, play_text, int_td, down, yards_to_goal, drive_event_number, drive_num, id_drive, change_of_pos_team)) %>%
+            #   arrange(id_play, game_id)
+            # 
+            # all_2327_drives_count <- all_2327_drives %>%
+            #   summarise(unique_drives = n_distinct(id_drive))
+            # 
+            # all_2327_drives_count
+            # 
+            # fgs_success = (made_fgs_count / all_2327_drives_count) * 100
+            # fgs_success
+            # 
+            # # Periods 1, 2, 3
+            # fgs_success_not4 <- made_fgs %>%
+            #   filter(period < 4) %>%
+            #   summarise(unique_drives = n_distinct(id_drive))
+            # 
+            # fgs_success_not4
+            # 
+            # all_drives_not4 <- all_2327_drives %>%
+            #   filter(period < 4) %>%
+            
+            
+            
+            success_td_drives <- pbp5 %>%
+              group_by(game_id, id_drive) %>%
+              filter(
+                any(down == 1 & yards_to_goal >= 23 & yards_to_goal <= 27) &
+                  any(str_detect(play_type, "\\b(?i)touchdown\\b")) &
+                  !str_detect(play_type, "\\b(?i)(opponent|interception return|fumble return|punt return|Blocked Field Goal)\\b")
+              ) %>%
+              ungroup() %>%
+              select(c(id_play, game_id, period, pos_team, def_pos_team, play_type, play_text, down, yards_to_goal, drive_event_number, drive_num, id_drive, change_of_pos_team))
+              # summarise(n = n())
+            #view(success_td_drives)
+            
+            success_td_count <- success_td_drives %>%
+              filter(str_detect(play_type, "\\b(?i)touchdown\\b")) %>%
+              summarise(n = n())
+                     
+            success_td_count
+            
+            # td_success_rate = success_td_count / (success_td_count + failed_td_count) * 100
+            # td_success_rate
+            
+            td_success_rate_b = (success_td_count / all_2327_drives_count) * 100
+            td_success_rate_b
+            
+            success_td_drives_not4_count <- success_td_drives %>%
+              filter(period < 4) %>%
+              filter(str_detect(play_type, "\\b(?i)touchdown\\b")) %>%
+              summarise(n = n())
+            
+            success_td_drives_not4_count
+            
+            td_success_rate_not4 <- (success_td_drives_not4_count / all_drives_not4) * 100
+            td_success_rate_not4
+            
+            # FIELD GOAL RATE
+            success_fg_drives <- pbp5 %>%
+              group_by(game_id, id_drive) %>%
+              filter(
+                any(down == 1 & yards_to_goal >= 23 & yards_to_goal <= 27) &
+                  any(str_detect(play_text, "\\b(?i)FG GOOD\\b"))
+              ) %>%
+              ungroup() %>%
+              select(c(id_play, game_id, period, pos_team, def_pos_team, play_type, play_text, down, yards_to_goal, drive_event_number, drive_num, id_drive, change_of_pos_team))
+            # summarise(n = n())
+            #view(success_fg_drives)
+            
+            success_fg_count <- success_fg_drives %>%
+              filter(str_detect(play_text, "\\b(?i)FG GOOD\\b")) %>%
+              summarise(n = n())
+            
+            success_fg_count
+            
+            fg_success_rate = (success_fg_count / all_2327_drives_count) * 100
+            fg_success_rate
+            
+            success_fg_drives_not4_count <- success_fg_drives %>%
+              filter(period < 4) %>%
+              filter(str_detect(play_text, "\\b(?i)FG GOOD\\b")) %>%
+              summarise(n = n())
+            
+            success_fg_drives_not4_count
+            
+            fg_success_rate_not4 <- (success_fg_drives_not4_count / all_drives_not4) * 100
+            fg_success_rate_not4
+            
+            # 2 POINT CONVERSION RATE
+            two_point_success <- pbp %>%
+              filter(
+                str_detect(play_text, "\\bTwo-Point Conversion\\b(\\)|$)") # Ends with ')' or nothing
+              ) %>%
+              summarise(n = n())
+            
+            two_point_success
+            
+            # Failed two-point conversions: Explicitly includes "Two-Point Conversion failed"
+            two_point_fail <- pbp %>%
+              filter(
+                str_detect(play_text, "\\bTwo-Point Conversion failed\\b")
+              ) %>%
+              summarise(n = n())
+            
+            two_point_fail
+            
+            two_point_success_rate = two_point_success / (two_point_success + two_point_fail) * 100
+            two_point_success_rate
+            
+            two_point_success_not4 <- pbp %>%
+              filter(str_detect(play_text, "\\bTwo-Point Conversion\\b(\\)|$)")) %>%
+              filter(period < 4) %>%
+              summarise(n = n())
+            
+            two_point_success_not4
+            
+            # Failed two-point conversions: Explicitly includes "Two-Point Conversion failed"
+            two_point_fail_not4 <- pbp %>%
+              filter(str_detect(play_text, "\\bTwo-Point Conversion failed\\b")) %>%
+              filter(period < 4) %>%
+              summarise(n = n())
+            
+            two_point_fail_not4
+            
+            two_point_success_rate_not4 = two_point_success_not4 / (two_point_success_not4 + two_point_fail_not4) * 100
+            two_point_success_rate_not4
+            
+            # NEED A TOUCHDOWN 
+            
+            #First approach
+            # All years, 
+            # team goes second in OT frame and is down by 6, 7, 8 points
+            all_years <- c(2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023)
+            pbp2 <- load_cfb_pbp(seasons = all_years)%>%
+              filter(home %in% power_five_teams & away %in% power_five_teams)
+            
+            glimpse(pbp2)
+            
+            hist_OT <- pbp2 %>%
+              filter(period == 5 | period == 6) %>%
+              select(c(year, id_play, game_id, period, clock.minutes, clock.seconds, pos_team, def_pos_team, pos_team_score, def_pos_team_score, score_diff, play_type, play_text, down, yards_to_goal, drive_event_number, drive_num, id_drive, change_of_pos_team))
+            
+            glimpse(hist_OT)
+            
+            hist_OT_pos_iding <- hist_OT %>%
+              group_by(game_id, period) %>%
+              mutate(possession_number = cumsum(if_else(row_number() == 1 | lag(change_of_pos_team, default = 0) == 1, 1, 0))) %>%
+              ungroup()
+            #view(hist_OT_pos_iding)
+            
+            hist_OT_second_pos <- hist_OT_pos_iding %>%
+              group_by(game_id) %>%
+              filter(all(possession_number <= 2)) %>%
+              ungroup()
+            
+            
+            #view(hist_OT_second_pos)
+            
+            hist_OT_qual_games <- hist_OT_second_pos %>%
+              group_by(id_drive, period) %>%
+              filter(possession_number == 2) %>%
+              filter(any(score_diff <= -6 & score_diff >= -8)) %>%
+              ungroup()
+            
+            #view(hist_OT_qual_games)
+            
+            hist_OT_drives <- hist_OT_qual_games %>% 
+              summarise(n = n_distinct(id_drive))
+            
+            hist_OT_drives
+            
+            hist_OT_tds <- hist_OT_qual_games %>%
+              filter(str_detect(play_type, "\\b(?i)touchdown\\b") &
+                       !str_detect(play_type, "\\b(?i)(opponent|interception return|fumble return|punt return|Blocked Field Goal)\\b"))
+            
+            #view(hist_OT_tds)
+            
+            hist_OT_tds_count <- hist_OT_tds %>%
+              summarise(n = n())
+            
+            hist_OT_tds_count
+            
+            first_approach_rate = (hist_OT_tds_count / hist_OT_drives) * 100
+            first_approach_rate
+            
+            # Second approach
+            # team has ball, between 3 and 1 minutes left, 1st down between 23 and 27
+            # 4th period
+            # team is down by between 4-8 or more than twelve points
+            
+            # view(pbp5[1, ])
+            view(pbp5 %>% select(c(id_play, game_id, period, clock.minutes, clock.seconds, pos_team, def_pos_team, pos_team_score, def_pos_team_score, score_diff, play_type, play_text, down, yards_to_goal, drive_event_number, drive_num, id_drive, change_of_pos_team)))
+            
+            all_drives_need <- pbp5 %>%
+              group_by(game_id, id_drive) %>%
+              filter(period == 4) %>%
+              filter(
+                any(down == 1 & yards_to_goal >= 23 & yards_to_goal <= 27 & period == 4 & 
+                    ((clock.minutes >= 1 & clock.minutes < 3) | (clock.minutes == 3 & clock.seconds == 0))) &
+                  ((score_diff <= -4 & score_diff >= -8) | score_diff < -12)) %>%
+              ungroup() %>%
+              select(c(id_play, game_id, period, clock.minutes, clock.seconds, pos_team, def_pos_team, pos_team_score, def_pos_team_score, score_diff, play_type, play_text, down, yards_to_goal, drive_event_number, drive_num, id_drive, change_of_pos_team)) %>%
+              arrange(id_play, game_id)
+            
+            all_drives_need_ids <- all_drives_need %>%
+              distinct(id_drive) %>%
+              pull(id_drive)
+            
+            all_drives_need_ids
+            
+            all_drives_need_count <- all_drives_need %>%
+              summarise(unique_drives = n_distinct(id_drive))
+            
+            all_drives_need_count
+            #view(all_drives_need)
+            
+            second_approach_tds <- pbp5 %>%
+              filter(id_drive %in% all_drives_need_ids & (str_detect(play_type, "\\b(?i)touchdown\\b")) &
+                       !str_detect(play_type, "\\b(?i)(opponent|interception return|fumble return|punt return|Blocked Field Goal)\\b")) %>%
+              select(c(id_play, game_id, period, clock.minutes, clock.seconds, pos_team, def_pos_team, pos_team_score, def_pos_team_score, score_diff, play_type, play_text, down, yards_to_goal, drive_event_number, drive_num, id_drive, change_of_pos_team))
+            
+            # view(second_approach_tds)
+            
+            second_approach_tds_count <- second_approach_tds %>%
+              summarise(n = n())
+            
+            second_approach_tds_count
+            
+            second_approach_rate = (first_approach_tds_count / all_drives_need_count) * 100
+            second_approach_rate
+            
+            # NEED FG RATE (20-25 yd):
+            made_fgs <- pbp5 %>%
+              filter(yards_to_goal >= 20 & yards_to_goal <= 25 &
+                  str_detect(play_text, "(?<!\\S)FG GOOD(?!\\S)"))
+            #view(made_fgs)
+            
+            missed_fgs <- pbp5 %>%
+              filter(yards_to_goal >= 20 & yards_to_goal <= 25 &
+                  str_detect(play_text, "(?<!\\S)FG MISSED(?!\\S)"))
+            #view(missed_fgs)
+            
+            num_made <- nrow(made_fgs)
+            num_missed <- nrow(missed_fgs)
+            
+            fg_20_25_rate <- (num_made)/(num_made+num_missed)
+            print(fg_20_25_rate)
+            
+            # RATES:
+            #td_success_rate_b
+            td_success_rate_not4
+            #fg_success_rate
+            fg_success_rate_not4
+            two_point_success_rate
+            #two_point_success_rate_not4
+            #need a touchdown 
+            first_approach_rate
+            second_approach_rate
+            fg_20_25_rate
+            
+        </code></pre>
+        </div>
+        <!-- Include Prism.js JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
+
+          
+    </main>
+    
+
+
+</body>
+</html>

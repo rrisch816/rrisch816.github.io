@@ -420,6 +420,28 @@ footer {
   border: none; /* Remove default border */
 }
 
+.code-container {
+  width: 100%;
+  max-width: 800px; /* Limit the maximum width */
+  height: 400px; /* Set height for vertical scrolling */
+  margin: 20px auto; /* Center the container */
+  border: 1px solid #ddd; /* Optional: add a border */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: auto; /* Enable horizontal scrolling only when needed */
+  background: #f9f9f9; /* Background color for better readability */
+  padding: 10px; /* Add padding for spacing */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for aesthetics */
+  border-radius: 4px; /* Optional: round the corners */
+}
+
+pre {
+  margin: 0; /* Remove default margins */
+  white-space: pre-wrap; /* Prevent horizontal scrolling for long lines */
+  word-wrap: break-word; /* Allow words to break within the container */
+  text-align: left; /* Keep text aligned to the left */
+}
+
+
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
