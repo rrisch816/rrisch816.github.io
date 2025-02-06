@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="../../stylesheets/styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="left-section">
+            <a href="../../index.html">Rebecca Risch</a>
+        </div>
+        <nav>
+            <a href="../../index.html">About Me</a>
+            <a href="../../projects.html" class="active">Projects</a>
+            <a href = "../../resume.html"> Resume</a>
+            <a href="../../contact.html"> Contact</a>
+        </nav>
+    </header>
+
+    <main class="wrapper">
+        <section class="text">
+            <h1>Flogistix: Data Science Intern, March - December 2023 </h1>
+            <h2>My responsibilities and achievements: </h2>
+            <ul class="facts">
+                <li>• Executed the first two phases of Predictive Maintenance Project (Exploration and Initial Analysis)- develop Machine Learning models to predict and preemptively resolve breakdowns on oil compressor units with vapor recovery tanks. 
+                    <ul>
+                        <li>◦ Objective is to increase equipment uptime; reducing Flogistix’s labor costs, clients’ methane emissions and lost revenue.</li>
+                    </ul>
+                </li>
+                <li>• Wrote SQL and PySpark scripts based on maintenance work order data to find average part lifespans and subsequent insights, providing executive leadership with actionable information. 
+                    <ul>
+                        <li>◦ Identified overaged parts currently in operation.</li>
+                        <li>◦ Analyzed lifespan trends between different operating areas.</li>
+                        <li>◦ Determined the most frequently replaced parts to optimize procurement.</li>
+                    </ul>
+                </li>
+                <li>• Presented findings to executive leadership and engineering teams with dashboard visualizations in ReDash and Databricks, and enabled further conversations about factors on which to train a future Machine Learning model. </li>
+                <li>• Wrote and pushed to production a PySpark script and Directed Acyclic Graph (DAG) that checks Flogistix's data tables and ensures proper population daily via Apache Airflow and Amazon Web Services (AWS).</li>
+            </ul>
+        </section>
+        <h2> <br> <br> Databricks Dashboard </h2>
+
+        <h3 class = "tabbed-in">
+            After the second phase of the Predictive Maintenance Project, I created a Databricks Dashboard to visually communicate my findings to executive leadership and engineering teams.
+            The wrangling and analysis behind these visualizations was executed with PySpark. 
+        </h3>
+
+        <img src="Databricks1.png" alt="Databricks1" class="image-style">
+        <img src="Databricks2.png" alt="Databricks2" class="image-style">
+        <img src="Databricks3.png" alt="Databricks3" class="image-style">
+        <img src="Databricks4.png" alt="Databricks4" class="image-style">
+        <img src="Databricks5.png" alt="Databricks5" class="image-style">
+        <img src="Databricks6.png" alt="Databricks6" class="image-style">
+
+        <h3 class = "tabbed-in">
+            After the first phase of the Predictive Maintenance Project, I created a ReDash Dashboard to visually communicate my findings to executive leadership and engineering teams.
+            The wrangling and analysis behind these visualizations was executed with SQL. 
+        </h3>
+
+        <img src="Redash1.png" alt="Redash1" class="image-style">
+        <img src="Redash2.png" alt="Redash2" class="image-style">
+        <img src="Redash3.png" alt="Redash3" class="image-style">
+        <img src="Redash4.png" alt="Redash4" class="image-style">
+
+        <h2> About: </h2>
+            <h3 class = "tabbed-in"> Flogistix specializes in Vapor Recovery and Methane Leak Detection. 
+                They manufacture oil compressors with vapor recovery tanks to prevent the byproduct methane from being vented into the atmosphere. 
+            They also perform leak detection studies on oil infrastructure with drones fitted with thermal cameras. Flogistix has a maintenance team to 
+            do routine checkups of compressors and respond to outages and part failures in the field. 
+            Flogistix produces all of its own in-house software systems - 
+            apps that help customers keep track of their compression operations and saved emissions, and the maintenance team organize their field work orders. </h3>
+            <h3><br></h3>
+            <section class = "adv-photo-grid">
+                <img src = "compressor1.jpeg" alt = "Field Work 1">
+                <img src = "compressor2.jpeg" alt = "Field Work 2">
+            </section>
+
+    </main>
+
+
+</body>
+</html>
