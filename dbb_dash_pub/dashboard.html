@@ -547,8 +547,8 @@ d3.csv("games_for_dash.csv").then(data => {
         const averages = [
             { metric: 'Speed\n ', value: averageSpeed, unit: 'MPH', colorfcn: speedColorScale, tx: centerX, ty: centerY - tileHeight - tileMargin},
             { metric: 'Spin\nRate', value: averageSpinRate, unit: 'RPM', colorfcn: spinRateColorScale, tx: centerX + tileWidth + tileMargin, ty: centerY - tileHeight - tileMargin},
-            { metric: 'Vertical\nBreak', value: averageAbvVertBreak, unit: 'FT', colorfcn: vertBreakColorScale, tx: centerX, ty: centerY},
-            { metric: 'Horizontal\nBreak', value: averageAbvHoriBreak, unit: 'FT', colorfcn: horiBreakColorScale, tx: centerX + tileWidth + tileMargin, ty: centerY},
+            { metric: 'Vertical\nBreak', value: averageAbvVertBreak, unit: 'IN', colorfcn: vertBreakColorScale, tx: centerX, ty: centerY},
+            { metric: 'Horizontal\nBreak', value: averageAbvHoriBreak, unit: 'IN', colorfcn: horiBreakColorScale, tx: centerX + tileWidth + tileMargin, ty: centerY},
         ];
 
         console.log('Averages:', averages);
